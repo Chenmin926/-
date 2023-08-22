@@ -47,19 +47,18 @@ function findTowNum(arr: number[]): number[] {
 // console.log(findTowNum([1, 1, 2, 2, 4, 4, 1, 5, 5, 10, 10, 5, 20, 20]))
 
 // 一个数组中 只有一种数出现了k次 其他数都出现M次 M>1 k<M
-function onlyK(arr: number[], k: number, m: number) {
+function onlyK(arr: number[], k: number, m: number): number {
   // 计数
   // res[0] 表示0位置的1出现了几次 res[i]则=i位置的1出现了几次
   let res: number[] = new Array(32).fill(0);
 
   for (let i = 0; i < arr.length; i++) {
-    console.log(arr[i])
     // 判断每个数每个位置上是否为1 是1的话就进行统计
     for (let j = 0; j < 32; j++) {
       res[j] += (arr[i] >> j) & 1
     }
   }
-  console.log(res, res.length)
+  // console.log(res, res.length)
   let ans: number = 0;
   for (let i = 0; i < 32; i++) {
     // 说明k这个数在这位上为0 否则为1
@@ -70,7 +69,87 @@ function onlyK(arr: number[], k: number, m: number) {
   }
   return ans;
 }
+
+// onlyK 对比写法用于校验结果
+function onlyKHash(arr: number[], k: number, m: number): number {
+  let obj: Record<string, number> = {};
+  for (let i = 0; i < arr.length; i++) {
+    if (!obj[arr[i]]) {
+      obj[arr[i]] = 1;
+    } else {
+      obj[arr[i]]++;
+    }
+  }
+  let ans = 0;
+  for (let i in obj) {
+    if (obj[i] === k) {
+      ans = +i;
+      break
+    }
+  }
+  return ans
+}
 // 写几个用onlyK的测试用例
-console.log('onlyK', onlyK([4, 4, 1, 3, 1, 3, 3, 1], 2, 3))
+// console.log('onlyK', onlyK([4, 4, 1, 3, 1, 3, 3, 1], 2, 3))
+// console.log('onlyK', onlyKHash([4, 4, 1, 3, 1, 3, 3, 1], 2, 3))
 // console.log(onlyK([1, 1, 2, 2, 4, 4, 1, 5,
 // 5, 10, 10, 5, 20, 20], 2, 2))
+
+function randomOnlyKArr(len: number, range: number, k: number, m: number): number[] {
+  let res = []
+  // k次的数
+  let kNum = Math.floor(Math.random() * range);
+  for (let i = 0; i < k; i++) {
+    res.push(kNum)
+  }
+  len--;
+  // 其他数字
+  let map: Record<string | number, number> = {};
+  for (let i = 0; i < len; i++) {
+    let num = Math.floor(Math.random() * range)
+    while (res.includes(num) || num === kNum) {
+      num = Math.floor(Math.random() * range)
+    }
+    map[num] = 0;
+    for (let j = 0; j < m; j++) {
+      map[num]++
+      res.push(num)
+    }
+  }
+  // console.log(res, map)
+  return res
+}
+// randomOnlyKArr(5, 10, 2, 4)
+
+// onlyK对数器
+function onlyKTest() {
+  // 随机数组配置
+  let len = 100;
+  let range = 200;
+  // 测试次数
+  let testTimes = 10000;
+  // 用于随机的k 和m
+  let max = 9;
+
+  // 测试
+  for (let i = 0; i < testTimes; i++) {
+    let a = Math.floor(Math.random() * max) + 1;
+    let b = Math.floor(Math.random() * max) + 1;
+    let k = Math.min(a, b);
+    let
+      m = Math.max(a, b);
+    if (k === m) {
+      m++
+    }
+    // 随机的数组
+    let arr = randomOnlyKArr(len, range, k, m);
+    let ans1 = onlyKHash(arr, k, m);
+    let ans2 = onlyK(arr, k, m);
+    if (ans1 !== ans2) {
+      console.log('fucking')
+      return
+    }
+  }
+  console.log('success')
+}
+onlyKTest()
