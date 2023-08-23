@@ -25,11 +25,10 @@ function removeElements(head: ListNode | null, val: number): ListNode | null {
   while (cur) {
     if (cur.val === val) {
       pre.next = cur.next
-      cur = pre
     } else {
       pre = cur
-      cur = cur.next
     }
+    cur = cur.next
   }
   return head
 };

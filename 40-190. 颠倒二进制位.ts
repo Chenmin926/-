@@ -13,27 +13,37 @@
 // 解释：输入的二进制串 00000010100101000001111010011100 表示无符号整数 43261596，
 //      因此返回 964176192，其二进制表示形式为 00111001011110000010100101000000。
 
-function reverseBits(n: number): number {
+/**
+ * 暴力解法，取出每一位按照栈的思想
+ * 然后将数组转为二进制字符串 再转成十进制数
+ * 时间复杂度为O(n) 空间复杂度为O(n)
+ */
+function reverseBits1(n: number): number {
   let res: number[] = new Array(32).fill(0);
   // 取出该十进制的二进制数
   for (let i = 0; i < 32; i++) {
     let bit = (n >> i) & 1;
     res[i] = bit;
   }
-  let ans: number = 0;
-  res.reverse();
-  let right: number = 32;
-  for (let i = 31; i; i--) {
-    ans |= res[i] << right;
-    right--;
-  }
-  let res1: number[] = new Array(32).fill(0);
-  for (let i = 0; i < 32; i++) {
-    let bit = (ans >> i) & 1;
-    res1[i] = bit;
-  }
-  console.log(res, res1, ans, res1[31], res[32]);
-  return ans
+  return parseInt(res.join(''), 2);
 };
-reverseBits(4294967293)
+reverseBits1(4294967293)
 // console.log(first)
+
+/**
+ * 优质解法
+ * 时间复杂度O(1) 空间复杂度O(1)
+ */
+function reverseBits2(n: number): number {
+  let ans: number = 0;
+  for (let i = 0; i < 32; i++) {
+    // ans << 1 相当于推进结果的位置
+    // n & 1 取出n的最后一位 
+    // 将n的最后一位与到ans的末尾
+    ans = ans << 1 | (n & 1);
+    // 取出了最后一位就要将n的最后一位去掉
+    n >>= 1
+  }
+  // x >>> 0本质上就是保证x有意义（为数字类型），且为正整数，且在无意义的情况下缺省值为0
+  return ans >>> 0;
+}
