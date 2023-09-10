@@ -1,4 +1,4 @@
-class SmallHeap {
+export class SmallHeap {
   heap: number[] = [];
   size: number = 0;
 
@@ -6,13 +6,17 @@ class SmallHeap {
     return !!this.size
   }
 
+  peek(): number | undefined {
+    return this.heap[0]
+  }
+
   poll() {
     let res = this.heap[0];
-    this.heap[0] = this.heap[this.size-1];
+    this.heap[0] = this.heap[this.size - 1];
     this.heap[--this.size] = res;
     this.heap.pop();
     this.heapify(0);
-    console.log(this.heap,this.size)
+    console.log(this.heap, this.size)
     return res
   }
 
