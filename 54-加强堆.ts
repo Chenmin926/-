@@ -1,8 +1,8 @@
 
-class HeapGreater<T> {
-  private heap: T[] = [];
+export class HeapGreater<T> {
+  public heap: T[] = [];
   private hashMap: Map<T, number> = new Map();
-  private heapSize: number = 0;
+  public heapSize: number = 0;
   private comparator: (a:T,b:T)=>number;
 
   constructor(comparator: (a: T, b: T) => number) {
@@ -17,6 +17,10 @@ class HeapGreater<T> {
     this.heap.push(value);
     this.hashMap.set(value, this.heapSize);
     this.heapInsert(this.heapSize++)
+  }
+
+  peek(): T {
+    return this.heap[0]
   }
 
   pop() {
@@ -77,6 +81,10 @@ class HeapGreater<T> {
     this.heapInsert(index);
     this.heapify(index);
 
+  }
+
+  isEmpty(): boolean {
+    return !!this.heapSize
   }
   
 
