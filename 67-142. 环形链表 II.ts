@@ -8,7 +8,7 @@ export class ListNode {
   }
 }
 
-function detectCycle(head: ListNode | null): ListNode | null {
+export function detectCycle(head: ListNode | null): ListNode | null {
   if (!head || !head.next || !head.next.next) return null;
 
   // 快慢指针
